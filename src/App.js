@@ -1,23 +1,48 @@
-import logo from './logo.svg';
+import { useState } from 'react';
 import './App.css';
+import Announcement from './components/Announcement';
+import Blank from './components/Blank';
+import Cart from './components/Cart';
+import Categories from './components/Categories';
+import Footer from './components/Footer';
+import Navbar from './components/Navbar';
+// import PathRoutes from './components/PathRoute';
+import Slider from './components/Slider';
+import Trending from './components/Trending';
 
-function App() {
+const App = () => {
+  const [show, setshow] = useState(true)
+  const [cart, setcart] = useState([])
+
+  const handleClick = (item) => {
+    if (cart.indexOf(item) !== -1) return;
+    setcart([...cart, item]);
+  };
+
+  const handleChange = (item, d) => {
+    const ind = cart.indexOf(item);
+    const arr = cart;
+    arr[ind].amount += d;
+
+    if(arr[ind].amount === 0) arr[ind].amount = 1;
+    setcart([...arr]);
+  };
+
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Announcement />
+      <Navbar setshow = {setshow} size={cart.length}/>
+      {show ? ( <Blank handleClick={handleClick} /> 
+      ) : ( 
+      <Cart cart={cart} setcart={setcart} handleChange={handleChange} /> )}  
+      <Slider />
+      <Trending />
+      <Categories />
+      <Footer />
+      
+      
+      
     </div>
   );
 }
